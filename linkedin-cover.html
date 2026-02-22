@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkedIn Cover – Muhammad Arslan</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a0a0f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* ═══════════════════════════════
+       BANNER — LinkedIn ratio 4:1
+    ═══════════════════════════════ */
+    .banner {
+      width: 100%;
+      max-width: 1060px;
+      aspect-ratio: 1584 / 396;
+      position: relative;
+      overflow: hidden;
+      /* border-radius: 10px;
+      box-shadow:
+        0 0 0 1px rgba(0, 212, 255, 0.15),
+        0 32px 100px rgba(0, 0, 0, 0.85); */
+    }
+
+    /* ── BACKGROUND IMAGE ── */
+    .bg {
+      position: absolute;
+      inset: 0;
+      /* background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=85&fit=crop'); */
+      background-image: url('image.png');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.3) saturate(2.6);
+      /* transform: scaleX(-1); */
+    }
+
+    /* ── OVERLAY GRADIENTS ── */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right,
+          rgba(4, 10, 22, 0.90) 0%,
+          rgba(4, 10, 22, 0.60) 38%,
+          rgba(4, 10, 22, 0.22) 62%,
+          rgba(4, 10, 22, 0.55) 100%),
+        radial-gradient(ellipse 55% 100% at 95% 50%,
+          rgba(0, 170, 230, 0.18) 0%,
+          transparent 70%),
+        linear-gradient(to top,
+          rgba(4, 10, 22, 0.65) 0%,
+          transparent 40%);
+    }
+
+    /* ── CYAN TOP LINE ── */
+    .top-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(to right,
+          transparent 0%,
+          rgba(0, 212, 255, 0.7) 20%,
+          rgba(0, 212, 255, 1.0) 50%,
+          rgba(0, 212, 255, 0.7) 80%,
+          transparent 100%);
+      z-index: 10;
+    }
+
+    /* ── BOTTOM LINE ── */
+    .bottom-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(to right,
+          transparent 0%,
+          rgba(0, 212, 255, 0.25) 30%,
+          rgba(0, 212, 255, 0.45) 50%,
+          rgba(0, 212, 255, 0.25) 70%,
+          transparent 100%);
+      z-index: 10;
+    }
+
+    /* ── LEFT ACCENT BAR ── */
+    .left-bar {
+      position: absolute;
+      left: 42%;
+      top: 18%;
+      bottom: 18%;
+      width: 3px;
+      background: linear-gradient(to bottom,
+          transparent,
+          rgba(0, 212, 255, 0.95) 30%,
+          rgba(0, 212, 255, 0.95) 70%,
+          transparent);
+      border-radius: 2px;
+      z-index: 10;
+    }
+
+    /* ── CORNER BRACKETS ── */
+    .corner {
+      display: none;
+      position: absolute;
+      z-index: 10;
+      width: 22px;
+      height: 22px;
+    }
+
+    .corner-tl {
+      top: 12px;
+      left: 12px;
+      border-top: 2px solid rgba(0, 212, 255, 0.55);
+      border-left: 2px solid rgba(0, 212, 255, 0.55);
+      border-radius: 2px 0 0 0;
+    }
+
+    .corner-tr {
+      top: 12px;
+      right: 12px;
+      border-top: 2px solid rgba(0, 212, 255, 0.3);
+      border-right: 2px solid rgba(0, 212, 255, 0.3);
+      border-radius: 0 2px 0 0;
+    }
+
+    .corner-bl {
+      bottom: 12px;
+      left: 12px;
+      border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+      border-left: 2px solid rgba(0, 212, 255, 0.3);
+      border-radius: 0 0 0 2px;
+    }
+
+    .corner-br {
+      bottom: 12px;
+      right: 12px;
+      border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+      border-right: 2px solid rgba(0, 212, 255, 0.2);
+      border-radius: 0 0 2px 0;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-left: 45.5%;
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'Fira Code', monospace;
+      font-size: clamp(7px, 0.9vw, 11px);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #00d4ff;
+      margin-bottom: clamp(6px, 1.1vw, 14px);
+      opacity: 0.85;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #00d4ff;
+      box-shadow: 0 0 8px rgba(0, 212, 255, 0.9);
+      flex-shrink: 0;
+    }
+
+    /* Name */
+    .name {
+      font-size: clamp(24px, 4.6vw, 60px);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.025em;
+      color: #ffffff;
+      margin-bottom: clamp(4px, 0.9vw, 12px);
+      text-shadow: 0 4px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .name span {
+      color: #00d4ff;
+      text-shadow: 0 0 40px rgba(0, 212, 255, 0.45);
+    }
+
+    /* Role */
+    .role {
+      font-size: clamp(9px, 1.4vw, 17px);
+      font-weight: 300;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+      margin-bottom: clamp(8px, 1.8vw, 24px);
+    }
+
+    .role strong {
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .email {
+      font-size: clamp(9px, 1.4vw, 17px);
+      font-weight: 300;
+      letter-spacing: 0.28em;
+      text-transform: lowercase;
+      color: rgba(210, 210, 210, 0.669);
+      margin-bottom: clamp(8px, 1.8vw, 24px);
+    }
+
+    /* Divider */
+    .divider {
+      width: clamp(30px, 3.5vw, 48px);
+      height: 2px;
+      background: linear-gradient(to right, #00d4ff, rgba(0, 212, 255, 0.15));
+      border-radius: 2px;
+      margin-bottom: clamp(8px, 1.8vw, 24px);
+    }
+
+    /* Portfolio */
+    .portfolio {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: clamp(8px, 1.0vw, 13px);
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.45);
+      letter-spacing: 0.04em;
+    }
+
+    .globe-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: clamp(16px, 1.8vw, 22px);
+      height: clamp(16px, 1.8vw, 22px);
+      border-radius: 50%;
+      border: 1px solid rgba(0, 212, 255, 0.45);
+      background: rgba(0, 212, 255, 0.08);
+      flex-shrink: 0;
+    }
+
+    .globe-icon svg {
+      width: 54%;
+      height: 54%;
+      stroke: #00d4ff;
+    }
+
+    .portfolio .url {
+      color: #00d4ff;
+      opacity: 0.8;
+    }
+
+    /* ── LABEL BELOW BANNER ── */
+    .below-label {
+      margin-top: 14px;
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.15);
+      letter-spacing: 0.14em;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="banner">
+
+    <!-- BACKGROUND IMAGE -->
+    <div class="bg"></div>
+
+    <!-- OVERLAYS -->
+    <div class="overlay"></div>
+
+    <!-- LINES -->
+    <div class="top-line"></div>
+    <div class="bottom-line"></div>
+    <div class="left-bar"></div>
+
+    <!-- CORNERS -->
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Full Stack Developer
+      </div>
+
+      <div class="name">
+        Muhammad <span>Arslan</span>
+      </div>
+
+      <!-- <div class="role">
+        <strong>Full Stack</strong> Developer
+      </div> -->
+
+      <div class="email">
+        marslanmustafa391@gmail.com
+      </div>
+
+      <div class="divider"></div>
+
+      <a class="portfolio" href="https://marslanmustafa.com" target="_blank">
+        <span class="globe-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="2" y1="12" x2="22" y2="12" />
+            <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+          </svg>
+        </span>
+        <span class="url">marslanmustafa.com</span>
+      </a>
+
+    </div>
+
+  </div>
+
+  <p class="below-label">LinkedIn Cover · 1584 × 396 · Muhammad Arslan</p>
+
+</body>
+
+</html>

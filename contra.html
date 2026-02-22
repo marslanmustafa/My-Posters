@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fullstack Web Developer — Contra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #080b10;
+      --surface: #0e1219;
+      --card: #111622;
+      --border: rgba(255, 255, 255, 0.07);
+      --accent: #00e5ff;
+      --accent2: #7c3aed;
+      --accent3: #10b981;
+      --text: #e8edf5;
+      --muted: #6b7a96;
+      --font-display: 'Syne', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-display);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID NOISE BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── GLOW ORBS ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.18;
+    }
+
+    .orb-1 {
+      width: 600px;
+      height: 600px;
+      background: var(--accent2);
+      top: -200px;
+      left: -200px;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+
+    .orb-2 {
+      width: 500px;
+      height: 500px;
+      background: var(--accent);
+      bottom: -150px;
+      right: -150px;
+      animation: drift 15s ease-in-out infinite alternate-reverse;
+    }
+
+    .orb-3 {
+      width: 350px;
+      height: 350px;
+      background: var(--accent3);
+      top: 40%;
+      left: 40%;
+      animation: drift 9s ease-in-out infinite alternate;
+    }
+
+    @keyframes drift {
+      from {
+        transform: translate(0, 0) scale(1);
+      }
+
+      to {
+        transform: translate(40px, 30px) scale(1.08);
+      }
+    }
+
+    /* ── WRAPPER ── */
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      z-index: 1;
+      padding: 28px 0 0;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .contra-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .contra-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent3);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(0.8);
+      }
+    }
+
+    .avail-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--accent3);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 64px 0 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 32px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(38px, 7vw, 72px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+
+    h1 .line-accent {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 17px;
+      line-height: 1.75;
+      color: #9aa5bc;
+      max-width: 600px;
+      font-weight: 400;
+      margin-bottom: 36px;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #000;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 24px rgba(0, 229, 255, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(0, 229, 255, 0.5);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      background: rgba(0, 229, 255, 0.05);
+    }
+
+    /* ── TECH STACK ── */
+    .tech-bar {
+      position: relative;
+      z-index: 1;
+      padding: 32px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin: 0 0 60px;
+      overflow: hidden;
+    }
+
+    .tech-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .tech-scroll-wrap {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tech-scroll-wrap::before,
+    .tech-scroll-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 80px;
+      z-index: 2;
+    }
+
+    .tech-scroll-wrap::before {
+      left: 0;
+      background: linear-gradient(to right, var(--bg), transparent);
+    }
+
+    .tech-scroll-wrap::after {
+      right: 0;
+      background: linear-gradient(to left, var(--bg), transparent);
+    }
+
+    .tech-scroll {
+      display: flex;
+      gap: 32px;
+      animation: scroll-left 22s linear infinite;
+      width: max-content;
+    }
+
+    @keyframes scroll-left {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    .tech-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 18px;
+      border-radius: 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      color: var(--text);
+      letter-spacing: 0.01em;
+    }
+
+    .tech-item svg,
+    .tech-item .ico {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ── SERVICES GRID ── */
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(22px, 4vw, 32px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 36px;
+    }
+
+    .services {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 60px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .service-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 24px;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 0% 0%, rgba(0, 229, 255, 0.06), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .service-card:hover {
+      border-color: rgba(0, 229, 255, 0.25);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+    }
+
+    .service-card:hover::before {
+      opacity: 1;
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 18px;
+    }
+
+    .card-icon.cyan {
+      background: rgba(0, 229, 255, 0.1);
+    }
+
+    .card-icon.purple {
+      background: rgba(124, 58, 237, 0.12);
+    }
+
+    .card-icon.green {
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .card-icon.orange {
+      background: rgba(251, 146, 60, 0.1);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .card-sub {
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: var(--accent);
+      margin-bottom: 14px;
+      letter-spacing: 0.06em;
+    }
+
+    .card-sub.purple {
+      color: #a78bfa;
+    }
+
+    .card-sub.green {
+      color: var(--accent3);
+    }
+
+    .card-sub.orange {
+      color: #fb923c;
+    }
+
+    .card-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: #8a96ab;
+      line-height: 1.5;
+    }
+
+    .card-list li::before {
+      content: '→';
+      color: var(--muted);
+      flex-shrink: 0;
+      margin-top: 1px;
+      font-size: 12px;
+    }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 60px;
+    }
+
+    .stat {
+      background: var(--card);
+      padding: 28px 24px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 28px 0 40px;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-note {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .footer-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeUp 0.7s ease forwards;
+    }
+
+    .fade-up:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+
+    .fade-up:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+    .fade-up:nth-child(3) {
+      animation-delay: 0.25s;
+    }
+
+    .fade-up:nth-child(4) {
+      animation-delay: 0.35s;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .stats-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="wrap header-inner">
+      <div class="contra-badge">
+        <span class="dot"></span>
+        Contra Profile · Fullstack Developer
+      </div>
+      <span class="avail-tag">✦ Available for Work</span>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <p class="hero-eyebrow fade-up">Fullstack Web Development</p>
+      <h1 class="fade-up">
+        Build Fast.<br>
+        Ship <span class="line-accent">Production-Ready.</span><br>
+        Scale Confidently.
+      </h1>
+      <p class="hero-desc fade-up">
+        I build fast, scalable, and production-ready web applications using modern JavaScript technologies. From clean
+        UI interfaces to secure backend systems and real-time features, I handle the complete development lifecycle.
+      </p>
+      <div class="hero-cta fade-up">
+        <a href="#" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Hire Me on Contra
+        </a>
+        <a href="#services" class="btn-secondary">
+          View Services
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH STACK BAR -->
+  <section class="tech-bar">
+    <div class="wrap">
+      <p class="tech-label">Tech Stack</p>
+    </div>
+    <div class="tech-scroll-wrap">
+      <div class="tech-scroll">
+        <!-- Set 1 -->
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24" fill="#61DAFB">
+            <path d="M12 13.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" />
+            <path fill-rule="evenodd"
+              d="M12 2.25c-2.34 0-4.47.6-6.07 1.65C4.12 5 2.9 6.66 2.9 8.6c0 1.35.56 2.56 1.53 3.6-.97 1.04-1.53 2.25-1.53 3.6 0 1.95 1.22 3.6 3.03 4.7C7.53 21.5 9.66 22.1 12 22.1s4.47-.6 6.07-1.65c1.81-1.1 3.03-2.75 3.03-4.7 0-1.35-.56-2.56-1.53-3.6.97-1.04 1.53-2.25 1.53-3.6 0-1.95-1.22-3.6-3.03-4.7C16.47 2.85 14.34 2.25 12 2.25zm0 1.5c2.1 0 4.03.55 5.45 1.47 1.43.93 2.15 2.13 2.15 3.38 0 .9-.37 1.77-1.05 2.55-.96-.33-2.05-.58-3.2-.72-.4-.9-.85-1.73-1.35-2.47.64-.35 1.25-.76 1.82-1.23a.75.75 0 10-.95-1.16c-.48.39-.98.73-1.5 1.03-.51-.31-1.04-.55-1.57-.72.53-.3 1.02-.64 1.5-1.03a.75.75 0 10-.95 1.16c.57.47 1.18.88 1.82 1.23-.5.74-.95 1.57-1.35 2.47-1.15.14-2.24.39-3.2.72-.68-.78-1.05-1.65-1.05-2.55 0-1.25.72-2.45 2.15-3.38C7.97 4.3 9.9 3.75 12 3.75z"
+              clip-rule="evenodd" />
+          </svg>
+          React
+        </div>
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24" fill="white">
+            <path
+              d="M11.572 0c-.176 0-.31.001-.358.007a19.76 19.76 0 01-.364.033C7.443.346 4.25 2.185 2.228 5.012a11.888 11.888 0 00-2.119 5.243c-.096.659-.108.854-.108 1.747s.012 1.089.108 1.748c.652 4.506 3.86 8.292 8.209 9.695.779.25 1.6.422 2.534.525.363.04 1.935.04 2.299 0 1.611-.178 2.977-.577 4.323-1.264.207-.106.247-.134.219-.158-.02-.013-.9-1.193-1.955-2.62l-1.919-2.592-2.404-3.558a338.739 338.739 0 00-2.422-3.556c-.009-.002-.018 1.579-.023 3.51-.007 3.38-.01 3.515-.052 3.595a.426.426 0 01-.206.214c-.075.037-.14.044-.495.044H7.81l-.108-.068a.438.438 0 01-.157-.171l-.05-.106.006-4.703.007-4.705.072-.092a.645.645 0 01.174-.143c.096-.047.134-.051.54-.051.478 0 .558.018.682.154.035.038 1.337 1.999 2.895 4.361a10760.433 10760.433 0 004.735 7.17l1.9 2.879.096-.063a12.317 12.317 0 002.466-2.163 11.944 11.944 0 002.824-6.134c.096-.66.108-.854.108-1.748 0-.893-.012-1.088-.108-1.747-.652-4.506-3.859-8.292-8.208-9.695a12.597 12.597 0 00-2.499-.523A33.119 33.119 0 0011.573 0zm4.069 7.217c.347 0 .408.005.486.047a.473.473 0 01.237.277c.018.06.023 1.365.018 4.304l-.006 4.218-.744-1.14-.746-1.14v-3.066c0-1.982.01-3.097.023-3.15a.478.478 0 01.233-.296c.096-.05.13-.054.5-.054z" />
+          </svg>
+          Next.js
+        </div>
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="ng" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#DD0031" />
+                <stop offset="100%" stop-color="#C3002F" />
+              </linearGradient>
+            </defs>
+            <path fill="url(#ng)"
+              d="M9.931 12.645h4.138l-2.07-4.908m0-7.737L.68 3.982l1.726 14.771L12 24l9.586-5.242L23.32 3.982 11.999.001zm7.064 18.31h-2.638l-1.422-3.503H8.996L7.574 18.31H4.936L11.999 2.05l7.064 16.31z" />
+          </svg>
+          Angular
+        </div>
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24" fill="#339933">
+            <path
+              d="M11.998 24c-.321 0-.641-.084-.924-.247l-2.938-1.737c-.438-.245-.225-.332-.08-.383.585-.203.703-.249 1.327-.603.065-.037.151-.023.218.017l2.256 1.339c.082.045.198.045.272 0l8.795-5.076c.082-.047.134-.141.134-.238V6.921c0-.099-.052-.19-.137-.242l-8.791-5.072c-.081-.047-.189-.047-.271 0L3.065 6.68c-.085.05-.139.145-.139.244v10.15c0 .097.054.189.136.232l2.408 1.392c1.307.654 2.107-.116 2.107-.891V7.787c0-.142.114-.253.256-.253h1.115c.139 0 .255.111.255.253v10.021c0 1.745-.95 2.745-2.604 2.745-.508 0-.909 0-2.026-.551L2.28 18.675c-.57-.329-.924-.943-.924-1.604V6.921c0-.661.354-1.275.924-1.603l8.795-5.082c.557-.315 1.296-.315 1.848 0l8.794 5.082c.57.328.924.942.924 1.603v10.15c0 .661-.354 1.273-.924 1.604l-8.794 5.076c-.283.163-.603.247-.924.247zm2.716-6.991c-3.853 0-4.654-1.769-4.654-3.254 0-.142.114-.253.255-.253h1.138c.126 0 .231.091.252.216.172 1.16.683 1.747 3.01 1.747 1.852 0 2.638-.419 2.638-1.403 0-.566-.224-.987-3.103-1.269-2.407-.236-3.898-.771-3.898-2.702 0-1.781 1.5-2.842 4.016-2.842 2.822 0 4.223.981 4.397 3.082.009.073-.017.145-.066.197-.051.05-.118.079-.19.079h-1.143a.256.256 0 01-.251-.208c-.274-1.22-.941-1.612-2.748-1.612-2.024 0-2.26.705-2.26 1.233 0 .641.278.827 3.009 1.188 2.701.358 3.987.866 3.987 2.771 0 1.924-1.603 3.029-4.398 3.029z" />
+          </svg>
+          Node.js
+        </div>
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="nest" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#E0234E" />
+                <stop offset="100%" stop-color="#FF2D78" />
+              </linearGradient>
+            </defs>
+            <path fill="url(#nest)"
+              d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.116 18.396a.75.75 0 01-.965-.445l-4.078-10.57-4.077 10.57a.75.75 0 01-1.41-.518l4.5-11.67a.75.75 0 011.41-.001l4.5 11.67a.75.75 0 01-.38.964z" />
+          </svg>
+          NestJS
+        </div>
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="mg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#47A248" />
+                <stop offset="100%" stop-color="#3D8A3F" />
+              </linearGradient>
+            </defs>
+            <path fill="url(#mg)"
+              d="M17.193 9.555c-1.264-5.58-4.252-7.507-4.573-8.422-.28-.814-.133-1.133-.13-1.133-.056.065-.235.242-.438.883C11.7.902 10.592 3.315 10.25 4.05c-.26-.018-.526-.045-.796-.065-.52-.04-.973-.048-1.375-.036C8.167.773 8.04 0 8.04 0c-1.204 1.58-2.1 2.974-2.618 4.186-.33.761-.487 1.29-.464 1.665.004.06.02.12.05.17-1.06.557-2.053 1.22-2.963 1.99A11.68 11.68 0 00.49 9.79C.18 10.39 0 11.07 0 11.8c0 4.419 3.581 8 8 8s8-3.581 8-8c0-.748-.113-1.47-.32-2.148l.025.027c-.002-.042-.01-.084-.012-.124zm-6.53 7.06c-.77 0-1.395-.626-1.395-1.396s.625-1.396 1.395-1.396c.77 0 1.394.626 1.394 1.396s-.624 1.396-1.394 1.396z" />
+          </svg>
+          MongoDB
+        </div>
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24" fill="#336791">
+            <path
+              d="M23.945 11.978a7.31 7.31 0 00-.103-1.032c-.225-1.357-.876-2.507-1.97-3.41l-.007-.007a.112.112 0 00-.014-.014c-.17-.13-.352-.249-.54-.354a6.168 6.168 0 00-.48-.233c-.057-.025-.115-.049-.173-.07-.41-.153-.85-.256-1.31-.298-.07-.007-.14-.01-.21-.013a6.24 6.24 0 00-.56.01c-.23.017-.457.05-.678.1a5.6 5.6 0 00-.555.163 5.45 5.45 0 00-.513.216 5.19 5.19 0 00-.47.264 4.98 4.98 0 00-.429.31c-.069.057-.136.116-.201.176-.077.07-.151.142-.222.215a4.63 4.63 0 00-.4.48 4.44 4.44 0 00-.297.48c-.04.077-.077.155-.11.234a4.305 4.305 0 00-.178.533c-.017.063-.03.126-.043.19l-.02.11c-.02.118-.033.237-.04.357-.004.06-.004.12-.003.18v.01c0 .06.002.12.006.18l.01.147a3.54 3.54 0 00.057.37c.01.05.022.1.035.15a3.42 3.42 0 00.108.337c.016.044.034.087.053.13.025.06.052.12.08.178.03.06.062.119.097.177l.09.14c.036.055.075.11.115.163l.093.12c.04.05.083.098.127.146.044.048.09.094.137.14.03.028.062.056.094.083a4.2 4.2 0 00.474.333c.054.031.11.061.166.09.07.034.143.067.217.098l.2.077c.069.025.14.048.213.07l.175.05c.093.023.188.045.284.062l.12.02c.11.018.222.031.336.04.058.003.115.006.173.006h.022c.103 0 .205-.007.306-.018.168-.018.334-.047.495-.088.162-.04.32-.09.474-.15a5.156 5.156 0 00.455-.21 5.07 5.07 0 00.423-.268c.134-.095.26-.198.381-.308.12-.11.234-.228.34-.352.054-.063.105-.127.154-.193.088-.12.17-.243.245-.37a4.44 4.44 0 00.214-.45 4.565 4.565 0 00.15-.516c.021-.093.037-.187.05-.283.01-.075.016-.15.02-.226V12a4.95 4.95 0 00-.055-.022z" />
+          </svg>
+          PostgreSQL
+        </div>
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="rd" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#764ABC" />
+                <stop offset="100%" stop-color="#593298" />
+              </linearGradient>
+            </defs>
+            <path fill="url(#rd)"
+              d="M16.634 16.504c.87-.075 1.543-.84 1.5-1.754-.047-.914-.796-1.648-1.709-1.648h-.061a1.71 1.71 0 00-1.648 1.769c.03.479.226.869.494 1.153-1.048 2.038-2.621 3.536-5.005 4.795-1.603.838-3.296 1.154-4.944.93-1.378-.195-2.456-.81-3.116-1.799-.988-1.499-1.078-3.116-.255-4.734.6-1.17 1.499-2.023 2.099-2.443a9.96 9.96 0 01-.42-1.543C-.868 13.408-.416 18.053 1.974 20.773c1.828 2.038 4.54 3.041 7.325 3.041.87 0 1.753-.09 2.623-.28 5.634-1.123 9.931-5.06 11.175-10.34-1.378.3-2.652.127-3.463-.69zm3.626-8.48a17.624 17.624 0 00-.526-.645c-1.753-1.994-4.4-3.086-7.355-3.086-.976 0-1.949.105-2.894.33-5.88 1.294-10.177 6.07-11.121 10.745C.674 9.98.838 8.077.989 7.14 1.603 3.688 3.416 1.64 4.96.832 6.503.024 8.345-.24 9.946.165c3.536.885 5.66 4.16 5.945 4.644a9.817 9.817 0 011.407-.15c3.371 0 5.93 1.604 7.325 3.506a.854.854 0 00-.363-.141z" />
+          </svg>
+          Redux
+        </div>
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="stripe" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#635BFF" />
+                <stop offset="100%" stop-color="#5045D5" />
+              </linearGradient>
+            </defs>
+            <path fill="url(#stripe)"
+              d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z" />
+          </svg>
+          Stripe
+        </div>
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24" fill="#010101">
+            <path
+              d="M11.64 0C5.208 0 0 5.208 0 11.64s5.208 11.64 11.64 11.64 11.64-5.208 11.64-11.64S18.072 0 11.64 0zm5.744 8.08l-1.892 8.92c-.14.619-.516.771-.047 1.048l-.93.855-1.028-.856c-.855.668-1.967 1.034-3.24 1.034-3.097 0-5.293-2.085-5.293-4.942 0-3.327 2.628-6.11 6.023-6.11 1.163 0 2.167.325 2.944.935l1.237-1.056.98.828-3.155 2.678c-.438-.28-.945-.438-1.522-.438-1.802 0-3.232 1.43-3.232 3.163 0 1.55 1.13 2.622 2.759 2.622.87 0 1.635-.28 2.191-.785l-1.74-1.478.85-.785 3.944 3.353-.5.43.82.695.855-.726z" />
+          </svg>
+          Socket.io
+        </div>
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="jwt" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#D63AFF" />
+                <stop offset="100%" stop-color="#FB015B" />
+              </linearGradient>
+            </defs>
+            <path fill="url(#jwt)"
+              d="M10.2 0v6.456L12 8.928l1.8-2.472V0zm3.6 0v5.58L12 8.064 10.2 5.58V0zM0 10.2h6.456L8.928 12l-2.472 1.8H0zm0 3.6h5.58L8.064 12l-2.484-1.8H0zM24 10.2h-6.456L15.072 12l2.472 1.8H24zm0 3.6h-5.58L15.936 12l2.484-1.8H24zM10.2 24v-6.456L12 15.072l1.8 2.472V24zm3.6 0v-5.58L12 15.936l-1.8 2.484V24z" />
+          </svg>
+          JWT
+        </div>
+        <!-- Duplicate for scroll loop -->
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24" fill="#61DAFB">
+            <circle cx="12" cy="12" r="2.5" />
+            <path stroke="#61DAFB" stroke-width="1.5" fill="none"
+              d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" opacity="0" />
+            <ellipse cx="12" cy="12" rx="10" ry="4" stroke="#61DAFB" stroke-width="1.2" fill="none" />
+            <ellipse cx="12" cy="12" rx="10" ry="4" stroke="#61DAFB" stroke-width="1.2" fill="none"
+              transform="rotate(60 12 12)" />
+            <ellipse cx="12" cy="12" rx="10" ry="4" stroke="#61DAFB" stroke-width="1.2" fill="none"
+              transform="rotate(120 12 12)" />
+          </svg>
+          React
+        </div>
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24" fill="white">
+            <path
+              d="M11.572 0c-.176 0-.31.001-.358.007a19.76 19.76 0 01-.364.033C7.443.346 4.25 2.185 2.228 5.012a11.888 11.888 0 00-2.119 5.243c-.096.659-.108.854-.108 1.747s.012 1.089.108 1.748c.652 4.506 3.86 8.292 8.209 9.695.779.25 1.6.422 2.534.525.363.04 1.935.04 2.299 0 1.611-.178 2.977-.577 4.323-1.264.207-.106.247-.134.219-.158-.02-.013-.9-1.193-1.955-2.62l-1.919-2.592-2.404-3.558a338.739 338.739 0 00-2.422-3.556c-.009-.002-.018 1.579-.023 3.51-.007 3.38-.01 3.515-.052 3.595a.426.426 0 01-.206.214c-.075.037-.14.044-.495.044H7.81l-.108-.068a.438.438 0 01-.157-.171l-.05-.106.006-4.703.007-4.705.072-.092a.645.645 0 01.174-.143c.096-.047.134-.051.54-.051.478 0 .558.018.682.154.035.038 1.337 1.999 2.895 4.361a10760.433 10760.433 0 004.735 7.17l1.9 2.879.096-.063a12.317 12.317 0 002.466-2.163 11.944 11.944 0 002.824-6.134c.096-.66.108-.854.108-1.748 0-.893-.012-1.088-.108-1.747-.652-4.506-3.859-8.292-8.208-9.695a12.597 12.597 0 00-2.499-.523A33.119 33.119 0 0011.573 0z" />
+          </svg>
+          Next.js
+        </div>
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24" fill="#339933">
+            <path
+              d="M11.998 24c-.321 0-.641-.084-.924-.247l-2.938-1.737c-.438-.245-.225-.332-.08-.383.585-.203.703-.249 1.327-.603.065-.037.151-.023.218.017l2.256 1.339c.082.045.198.045.272 0l8.795-5.076c.082-.047.134-.141.134-.238V6.921c0-.099-.052-.19-.137-.242l-8.791-5.072c-.081-.047-.189-.047-.271 0L3.065 6.68c-.085.05-.139.145-.139.244v10.15c0 .097.054.189.136.232l2.408 1.392c1.307.654 2.107-.116 2.107-.891V7.787c0-.142.114-.253.256-.253h1.115c.139 0 .255.111.255.253v10.021c0 1.745-.95 2.745-2.604 2.745-.508 0-.909 0-2.026-.551L2.28 18.675c-.57-.329-.924-.943-.924-1.604V6.921c0-.661.354-1.275.924-1.603l8.795-5.082c.557-.315 1.296-.315 1.848 0l8.794 5.082c.57.328.924.942.924 1.603v10.15c0 .661-.354 1.273-.924 1.604l-8.794 5.076c-.283.163-.603.247-.924.247z" />
+          </svg>
+          Node.js
+        </div>
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24">
+            <path fill="#635BFF"
+              d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z" />
+          </svg>
+          Stripe
+        </div>
+        <div class="tech-item">
+          <svg viewBox="0 0 24 24" fill="#47A248">
+            <path
+              d="M17.193 9.555c-1.264-5.58-4.252-7.507-4.573-8.422-.28-.814-.133-1.133-.13-1.133-.056.065-.235.242-.438.883-.851 2.416-1.959 4.83-2.3 5.565-.26-.018-.526-.045-.796-.065-.52-.04-.973-.048-1.375-.036-.432-3.277-.558-4.05-.558-4.05C7.443 1.58 6.547 2.974 6.03 4.186c-.33.761-.487 1.29-.464 1.665.004.06.02.12.05.17-1.06.557-2.053 1.22-2.963 1.99A11.68 11.68 0 00.49 9.79C.18 10.39 0 11.07 0 11.8c0 4.419 3.581 8 8 8s8-3.581 8-8c0-.748-.113-1.47-.32-2.148z" />
+          </svg>
+          MongoDB
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="wrap">
+    <div class="stats-strip">
+      <div class="stat">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">Projects Shipped</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Job Success</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">5★</div>
+        <div class="stat-label">Client Rating</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="wrap">
+      <p class="section-label">What I Deliver</p>
+      <h2 class="section-title">End-to-End Web Engineering</h2>
+      <div class="services-grid">
+
+        <!-- Frontend -->
+        <div class="service-card">
+          <div class="card-icon cyan">⚛️</div>
+          <div class="card-title">Frontend Development</div>
+          <div class="card-sub">React · Next.js · Redux · Shadcn UI</div>
+          <ul class="card-list">
+            <li>Responsive, high-performance apps using React</li>
+            <li>Clean, reusable component architecture</li>
+            <li>Modern UI with Shadcn UI components</li>
+            <li>Global state management via Redux</li>
+            <li>Optimized performance & SEO best practices</li>
+          </ul>
+        </div>
+
+        <!-- Backend -->
+        <div class="service-card">
+          <div class="card-icon purple">🔧</div>
+          <div class="card-title">Backend Development</div>
+          <div class="card-sub purple">Node.js · NestJS · MongoDB · PostgreSQL</div>
+          <ul class="card-list">
+            <li>RESTful & modular APIs with Node.js + NestJS</li>
+            <li>Scalable architecture & clean code structure</li>
+            <li>JWT auth & role-based access control</li>
+            <li>Database design & optimization</li>
+          </ul>
+        </div>
+
+        <!-- Real-Time -->
+        <div class="service-card">
+          <div class="card-icon green">⚡</div>
+          <div class="card-title">Real-Time Applications</div>
+          <div class="card-sub green">Socket.io · WebSockets · Live Data</div>
+          <ul class="card-list">
+            <li>Chat systems & messaging platforms</li>
+            <li>Live notifications & event streaming</li>
+            <li>Real-time dashboards & analytics</li>
+            <li>Socket.io seamless communication layer</li>
+          </ul>
+        </div>
+
+        <!-- Payment -->
+        <div class="service-card">
+          <div class="card-icon orange">💳</div>
+          <div class="card-title">Payment Integration</div>
+          <div class="card-sub orange">Stripe · Webhooks · Subscriptions</div>
+          <ul class="card-list">
+            <li>Secure Stripe payment integration</li>
+            <li>Subscriptions & recurring billing flows</li>
+            <li>Webhook handling & event validation</li>
+            <li>Full payment flow optimization</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap footer-inner">
+      <p class="footer-note">© 2024 · Fullstack Developer · Available on Contra</p>
+      <div class="footer-tags">
+        <span class="tag">REACT</span>
+        <span class="tag">NODE.JS</span>
+        <span class="tag">NESTJS</span>
+        <span class="tag">MONGODB</span>
+        <span class="tag">STRIPE</span>
+        <span class="tag">SOCKET.IO</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
